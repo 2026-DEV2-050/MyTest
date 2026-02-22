@@ -20,4 +20,15 @@ class BerlinClockMapperTest {
 
         assertEquals(LampStatus.OFF, state.secondsLamp.status)
     }
+
+    @Test
+    fun `13-00-00 should light 2 five-hour lamps and 3 one-hour lamps`() {
+        val state = BerlinClockMapper.map(LocalTime.of(13, 0, 0))
+
+        val fiveHoursOn = state.fiveHoursRow.count { it.status == LampStatus.ON }
+        val oneHoursOn = state.oneHourRow.count { it.status == LampStatus.ON }
+
+        assertEquals(2, fiveHoursOn)
+        assertEquals(3, oneHoursOn)
+    }
 }
