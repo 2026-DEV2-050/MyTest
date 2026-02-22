@@ -62,3 +62,11 @@ Run tests:
 
 ```bash
 ./gradlew test
+
+## Screenshots
+
+### Light Mode
+![Light Mode](screenshots/light_mode.png)
+
+### Dark Mode
+![Dark Mode](screenshots/dark_mode.png)
