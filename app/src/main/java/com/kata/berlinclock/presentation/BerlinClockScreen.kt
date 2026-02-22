@@ -153,6 +153,6 @@ private fun DigitalTime(state: BerlinClockState) {
         text = state.time.format(formatter),
         fontSize = 52.sp,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onBackground // 👈 HERE
+        color = MaterialTheme.colorScheme.onBackground
     )
 }
