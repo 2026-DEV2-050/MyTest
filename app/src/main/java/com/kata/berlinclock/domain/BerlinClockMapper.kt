@@ -12,9 +12,13 @@ object BerlinClockMapper {
         val secondsOn = time.second % 2 == 0
 
         val hours = time.hour
+        val minutes = time.minute
 
         val fiveHoursOn = hours / 5
         val oneHoursOn = hours % 5
+
+        val fiveMinutesOn = minutes / 5
+        val oneMinutesOn = minutes % 5
 
         return BerlinClockState(
             secondsLamp = Lamp(
@@ -23,8 +27,8 @@ object BerlinClockMapper {
             ),
             fiveHoursRow = solidRow(4, fiveHoursOn, LampColor.RED),
             oneHourRow = solidRow(4, oneHoursOn, LampColor.RED),
-            fiveMinutesRow = emptyList(),
-            oneMinuteRow = emptyList()
+            fiveMinutesRow = fiveMinutesRow(fiveMinutesOn),
+            oneMinuteRow = solidRow(4, oneMinutesOn, LampColor.YELLOW)
         )
     }
 
@@ -33,6 +37,18 @@ object BerlinClockMapper {
             Lamp(
                 color = color,
                 status = if (index < onCount) LampStatus.ON else LampStatus.OFF
+            )
+        }
+
+    private fun fiveMinutesRow(onCount: Int): List<Lamp> =
+        List(11) { index ->
+            val isOn = index < onCount
+            val isQuarter = (index + 1) % 3 == 0
+            val color = if (isQuarter) LampColor.RED else LampColor.YELLOW
+
+            Lamp(
+                color = color,
+                status = if (isOn) LampStatus.ON else LampStatus.OFF
             )
         }
 }

@@ -1,5 +1,6 @@
 package com.kata.berlinclock.domain
 
+import com.kata.berlinclock.domain.model.LampColor
 import com.kata.berlinclock.domain.model.LampStatus
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -41,5 +42,27 @@ class BerlinClockMapperTest {
 
         assertEquals(6, fiveMinutesOn)
         assertEquals(2, oneMinutesOn)
+    }
+
+    @Test
+    fun `five-minute row quarter lamps should be red`() {
+        val state = BerlinClockMapper.map(LocalTime.of(0, 32, 0))
+
+        // positions 3 and 6 are quarter markers (1-indexed)
+        assertEquals(LampColor.RED, state.fiveMinutesRow[2].color)
+        assertEquals(LampColor.RED, state.fiveMinutesRow[5].color)
+        // position 9 is also a quarter marker
+        assertEquals(LampColor.RED, state.fiveMinutesRow[8].color)
+    }
+
+    @Test
+    fun `23-59-59 edge case`() {
+        val state = BerlinClockMapper.map(LocalTime.of(23, 59, 59))
+
+        assertEquals(LampStatus.OFF, state.secondsLamp.status)
+        assertEquals(4, state.fiveHoursRow.count { it.status == LampStatus.ON })
+        assertEquals(3, state.oneHourRow.count { it.status == LampStatus.ON })
+        assertEquals(11, state.fiveMinutesRow.count { it.status == LampStatus.ON })
+        assertEquals(4, state.oneMinuteRow.count { it.status == LampStatus.ON })
     }
 }
