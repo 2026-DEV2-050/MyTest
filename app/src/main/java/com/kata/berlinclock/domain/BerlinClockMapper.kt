@@ -21,6 +21,7 @@ object BerlinClockMapper {
         val oneMinutesOn = minutes % 5
 
         return BerlinClockState(
+            time = time,
             secondsLamp = Lamp(
                 color = LampColor.YELLOW,
                 status = if (secondsOn) LampStatus.ON else LampStatus.OFF

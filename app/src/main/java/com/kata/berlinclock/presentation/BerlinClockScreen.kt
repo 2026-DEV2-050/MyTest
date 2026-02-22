@@ -12,13 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,17 +27,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kata.berlinclock.domain.model.BerlinClockState
 import com.kata.berlinclock.domain.model.Lamp
 import com.kata.berlinclock.domain.model.LampColor
 import com.kata.berlinclock.domain.model.LampStatus
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun BerlinClockScreen(vm: BerlinClockViewModel = viewModel()) {
     val state by vm.state.collectAsState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -61,7 +63,7 @@ fun BerlinClockScreen(vm: BerlinClockViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Digital time
-        DigitalTime()
+        DigitalTime(state)
     }
 }
 
@@ -134,12 +136,12 @@ private fun LampBlock(
 }
 
 @Composable
-private fun DigitalTime() {
-    val now = remember { java.time.LocalTime.now() }
+private fun DigitalTime(state: BerlinClockState) {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
     Text(
-        text = now.toString().substring(0, 5),
-        fontSize = 48.sp,
+        text = state.time.format(formatter),
+        fontSize = 52.sp,
         fontWeight = FontWeight.Bold
     )
 }
