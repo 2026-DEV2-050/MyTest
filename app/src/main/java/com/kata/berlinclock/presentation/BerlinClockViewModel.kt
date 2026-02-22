@@ -18,10 +18,15 @@ class BerlinClockViewModel (
     private val _state = MutableStateFlow(BerlinClockMapper.map(LocalTime.now(clock)))
     val state: StateFlow<BerlinClockState> = _state
 
+    private val _currentTime = MutableStateFlow(LocalTime.now(clock))
+    val currentTime: StateFlow<LocalTime> = _currentTime
+
     init {
         viewModelScope.launch {
             while (true) {
-                _state.value = BerlinClockMapper.map(LocalTime.now(clock))
+                val now = LocalTime.now(clock)
+                _currentTime.value = now
+                _state.value = BerlinClockMapper.map(now)
                 delay(1000)
             }
         }
