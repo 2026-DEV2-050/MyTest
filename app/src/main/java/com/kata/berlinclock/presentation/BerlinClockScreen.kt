@@ -12,12 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,37 +40,41 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun BerlinClockScreen(vm: BerlinClockViewModel = viewModel()) {
     val state by vm.state.collectAsState()
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .verticalScroll(rememberScrollState())
-            .wrapContentHeight()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .wrapContentHeight()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Seconds circle
+            SecondsCircle(state.secondsLamp)
 
-        // Seconds circle
-        SecondsCircle(state.secondsLamp)
+            // 5-hour row
+            LargeLampRow(state.fiveHoursRow)
 
-        // 5-hour row
-        LargeLampRow(state.fiveHoursRow)
+            // 1-hour row
+            LargeLampRow(state.oneHourRow)
 
-        // 1-hour row
-        LargeLampRow(state.oneHourRow)
+            // 5-minute row (11 lamps)
+            SmallLampRow(state.fiveMinutesRow)
 
-        // 5-minute row (11 lamps)
-        SmallLampRow(state.fiveMinutesRow)
+            // 1-minute row
+            LargeLampRow(state.oneMinuteRow)
 
-        // 1-minute row
-        LargeLampRow(state.oneMinuteRow)
+            Spacer(modifier = Modifier.height(32.dp))
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Digital time
-        DigitalTime(state)
+            // Digital time
+            DigitalTime(state)
+        }
     }
 }
 
@@ -144,10 +149,10 @@ private fun LampBlock(
 @Composable
 private fun DigitalTime(state: BerlinClockState) {
     val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-
     Text(
         text = state.time.format(formatter),
         fontSize = 52.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onBackground // 👈 HERE
     )
 }
