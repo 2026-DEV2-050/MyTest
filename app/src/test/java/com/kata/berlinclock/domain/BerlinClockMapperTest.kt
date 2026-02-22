@@ -14,4 +14,10 @@ class BerlinClockMapperTest {
         assertEquals(LampStatus.ON, state.secondsLamp.status)
     }
 
+    @Test
+    fun `00-00-01 should turn seconds lamp OFF`() {
+        val state = BerlinClockMapper.map(LocalTime.of(0, 0, 1))
+
+        assertEquals(LampStatus.OFF, state.secondsLamp.status)
+    }
 }
