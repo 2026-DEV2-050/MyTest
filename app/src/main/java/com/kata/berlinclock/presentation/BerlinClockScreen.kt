@@ -43,6 +43,15 @@ fun BerlinClockScreen(vm: BerlinClockViewModel = viewModel()) {
 
         // 5-hour row
         LargeLampRow(state.fiveHoursRow)
+
+        // 1-hour row
+        LargeLampRow(state.oneHourRow)
+
+        // 5-minute row (11 lamps)
+        SmallLampRow(state.fiveMinutesRow)
+
+        // 1-minute row
+        LargeLampRow(state.oneMinuteRow)
     }
 }
 
@@ -70,6 +79,22 @@ private fun LargeLampRow(lamps: List<Lamp>) {
             LampBlock(
                 lamp = lamp,
                 height = 50.dp,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun SmallLampRow(lamps: List<Lamp>) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        lamps.forEach { lamp ->
+            LampBlock(
+                lamp = lamp,
+                height = 40.dp,
                 modifier = Modifier.weight(1f)
             )
         }
