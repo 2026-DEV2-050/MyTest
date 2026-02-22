@@ -62,6 +62,8 @@ Run tests:
 
 ```bash
 ./gradlew test
+```
+
 
 ## Screenshots
 
